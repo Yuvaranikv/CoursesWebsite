@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses Table</title>
+</head>
+
+<body>
+    <h1>Course List</h1>
+
+    <table id="coursesTable">
+        <thead>
+            <tr>
+                <th>Department</th>
+                <th>Course Number</th>
+                <th>Course Name</th>
+            </tr>
+        </thead>
+        <tbody id="coursesTableBody">
+            <!-- Table content will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch courses data from API
+            fetch('http://localhost:8081/api/courses')
+                .then(response => response.json())
+                .then(data => {
+                    const coursesTableBody = document.getElementById('coursesTableBody');
+
+                    // Iterate over the courses and populate the table
+                    data.forEach(course => {
+                        const row = document.createElement('tr');
+                        const deptCell = document.createElement('td');
+                        const courseNumCell = document.createElement('td');
+                        const courseNameCell = document.createElement('td');
+
+                        deptCell.textContent = course.dept;
+                        courseNumCell.textContent = course.courseNum;
+                        courseNameCell.textContent = course.courseName;
+
+                        row.appendChild(deptCell);
+                        row.appendChild(courseNumCell);
+                        row.appendChild(courseNameCell);
+
+                        coursesTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
