@@ -16,6 +16,7 @@
                 <th>Department</th>
                 <th>Course Number</th>
                 <th>Course Name</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody id="coursesTableBody">
@@ -25,27 +26,32 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const coursesTableBody = document.getElementById('coursesTableBody');
+
             // Fetch courses data from API
             fetch('http://localhost:8081/api/courses')
                 .then(response => response.json())
                 .then(data => {
-                    const coursesTableBody = document.getElementById('coursesTableBody');
-
                     // Iterate over the courses and populate the table
                     data.forEach(course => {
                         const row = document.createElement('tr');
-                        const deptCell = document.createElement('td');
-                        const courseNumCell = document.createElement('td');
-                        const courseNameCell = document.createElement('td');
+                        
+                        // Populate department, course number, and course name
+                        ['dept', 'courseNum', 'courseName'].forEach(prop => {
+                            const cell = document.createElement('td');
+                            cell.textContent = course[prop];
+                            row.appendChild(cell);
+                        });
 
-                        deptCell.textContent = course.dept;
-                        courseNumCell.textContent = course.courseNum;
-                        courseNameCell.textContent = course.courseName;
+                        // Create a cell for showing details with a link
+                        const showDetailsCell = document.createElement('td');
+                        const detailsLink = document.createElement('a');
+                        detailsLink.href = `details.html?cid=${course.id}`;
+                        detailsLink.textContent = 'See details';
+                        showDetailsCell.appendChild(detailsLink);
+                        row.appendChild(showDetailsCell);
 
-                        row.appendChild(deptCell);
-                        row.appendChild(courseNumCell);
-                        row.appendChild(courseNameCell);
-
+                        // Append the row to the table body
                         coursesTableBody.appendChild(row);
                     });
                 })

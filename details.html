@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> Course details </h1>
+    <div id="courseContainerDiv"></div>
+    <script>
+        window.onload = function () {
+            const urlParams = new URLSearchParams(location.search);
+            // location.search returns the query string part of the URL
+            let cid = -1;
+            if (urlParams.has("cid") === true) {
+                cid = urlParams.get("cid")
+                // call a method that fetches this course
+                getCourse(cid);
+            }
+
+        }
+
+        function getCourse(cid) {
+            fetch('http://localhost:8081/api/courses/' + cid)
+                .then(response => response.json())
+                .then(course => {
+                    // this returns a single course!
+                    const container =
+                        document.getElementById('courseContainerDiv');
+
+                    // display one course property in a <p>
+                    const deptP = document.createElement('p');
+                    deptP.textContent = `Department: ${course.dept}`;
+                    const courseNumP = document.createElement('p');
+                    courseNumP.textContent = `Course Num: ${course.courseNum}`;
+                    const courseNameP = document.createElement('p');
+                    courseNameP.textContent = `Course Name: ${course.courseName}`;
+                    const instructorP = document.createElement('p');
+                    instructorP.textContent = `Instructor: ${course.instructor}`;
+                    const startDateP = document.createElement('p');
+                    startDateP.textContent = `Start Date: ${course.startDate}`;
+                    const numDaysP = document.createElement('p');
+                    numDaysP.textContent = `Instructor: ${course.numDays}`;
+                    container.appendChild(deptP);
+                    container.appendChild(courseNumP);
+                    container.appendChild(courseNameP);
+                    container.appendChild(instructorP);
+                    container.appendChild(startDateP);
+                    container.appendChild(numDaysP);
+                    // repeat for each field you want to display
+
+                })
+
+                .catch(error => {
+                    // handle errors that occurred during the fetch request
+                });
+        }
+
+
+    </script>
+</body>
+
+</html>
